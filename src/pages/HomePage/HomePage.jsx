@@ -1,6 +1,17 @@
+import axios from "axios"
+import { useEffect } from "react"
 import styled from "styled-components"
+import ENDPOINTS from "../../endpoints"
 
 export default function HomePage() {
+
+    useEffect( () => {
+        axios.get(ENDPOINTS.movies)
+    }, [])
+
+
+
+
     return (
         <PageContainer>
             Selecione o filme

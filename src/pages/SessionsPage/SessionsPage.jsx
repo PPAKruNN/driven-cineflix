@@ -71,9 +71,11 @@ const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
     margin: 20px 0;
+
     button {
         margin-right: 20px;
     }
+
     a {
         text-decoration: none;
     }
