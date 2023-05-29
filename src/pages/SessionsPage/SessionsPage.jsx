@@ -46,7 +46,7 @@ export default function SessionsPage() {
             Selecione o horário
 
             <div>
-                {genSessions()};
+                {genSessions()}
             </div> 
 
             <FooterContainer>
@@ -90,8 +90,15 @@ const ButtonsContainer = styled.div`
     flex-direction: row;
     margin: 20px 0;
 
+    gap: 15px;
+
     button {
-        margin-right: 20px;
+        color: #fff;
+        font-size: 18px;
+        background-color: #E8833A;
+        border-radius: 3px;
+        padding: 10px;
+        border: none;
     }
 
     a {

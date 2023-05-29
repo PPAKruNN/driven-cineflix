@@ -1,31 +1,32 @@
+import { Link, useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SuccessPage() {
+    const {state} = useLocation()
+
 
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
             <TextContainer>
-                <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
+                <strong><p>Filme e sessao</p></strong>
+                <p>{state.session.movie.title}</p>
+                <p>{state.session.day.date} - {state.session.name}</p>
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
+                {state.ids.map( seatId => <p key={seatId}>Assento {state.session.seats.find(c => c.id === seatId).name}</p>)}
             </TextContainer>
 
             <TextContainer>
                 <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
+                <p>Nome: {state.name}</p>
+                <p>CPF: {state.cpf}</p>
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <Link to={"/"}><button>Voltar para Home</button></Link>
         </PageContainer>
     )
 }
@@ -40,11 +41,19 @@ const PageContainer = styled.div`
     margin: 30px 20px;
     padding-bottom: 120px;
     padding-top: 70px;
+
+    gap: 20px;
     a {
         text-decoration: none;
     }
     button {
         margin-top: 50px;
+        color: #fff;
+        font-size: 18px;
+        background-color: #E8833A;
+        border-radius: 3px;
+        padding: 10px;
+        border: none;
     }
     h1 {
         font-family: 'Roboto';
@@ -63,9 +72,14 @@ const TextContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 30px;
+
+    gap: 5px;
+    p{
+        padding: 0px;
+        margin: 0px;
+    }
     strong {
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
 `

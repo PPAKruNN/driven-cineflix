@@ -5,6 +5,7 @@ import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import axios from "axios"
+import ResetStyle from "./style/ResetStyle"
 
 export default function App() {
 
@@ -12,6 +13,7 @@ export default function App() {
 
     return (
         <BrowserRouter>
+            <ResetStyle/>
            <NavContainer>CINEFLEX</NavContainer>
 
             <Routes>

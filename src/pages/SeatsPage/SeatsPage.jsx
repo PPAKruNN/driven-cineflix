@@ -1,12 +1,13 @@
+/* eslint-disable no-useless-escape */
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import ENDPOINTS from "../../endpoints";
 import SeatItem from "./SeatItem";
 
-        // TODO:    
-        // Gerar assentos dinamicamente.
+// TODO:    
+// Gerar assentos dinamicamente.
         // Fazer verificacoes do formulario.
         // Alterar informacoes do footer.
         // Passar informacoes pra sucess page. (Usando NAVIGATE e USELOCATION)
@@ -14,9 +15,13 @@ import SeatItem from "./SeatItem";
 
 export default function SeatsPage() {
     const {idSessao} = useParams();
-    const [sessionData, setSessionData] = useState({});
+    const [sessionData, setSessionData] = useState({movie: {}, day: {}, });
     const [selectedSeats, setSelectedSeats] = useState([]);
+    const [buyerName, setBuyerName] = useState("");
+    const [buyerCPF, setBuyerCPF] = useState("");
     
+    const navigator = useNavigate()
+
     useEffect( () => {
         const promisse = axios.get(ENDPOINTS.seats(idSessao));
         promisse.then( res => setSessionData(res.data))
@@ -43,6 +48,38 @@ export default function SeatsPage() {
         
     } 
 
+    function cpfInput(event) {
+        console.log("teste")
+        let input = event.target.value.replace(/[\D\s\._\-]+/g, "")
+        input = input ? parseInt( input, 10 ) : ""; 
+        const arr = input.toString().split("");
+    
+        if(arr.length > 3 )arr.splice(3,0,".")
+        if(arr.length > 7 )arr.splice(7,0,".")
+        if(arr.length > 11 )arr.splice(11,0,"-")
+        setBuyerCPF(arr.join(""));
+    }
+
+    function seatBuySubmission() {
+        event.preventDefault();
+
+        if(selectedSeats.length === 0) return alert("Nenhum assento escolhido!"); 
+        console.log("Seat buy submitted!")
+        const cpf = buyerCPF.replace(/[\D\s\._\-]+/g, "")
+        const booking = {
+            ids: selectedSeats,
+            name: buyerName,
+            cpf: cpf,
+        }
+        axios.post(ENDPOINTS.reservate, booking)
+        console.log(booking);
+
+
+        booking.cpf = buyerCPF;
+        booking.session = sessionData;
+        navigator("/sucesso", {state: booking})
+    }
+
     return (
         <PageContainer>
             Selecione o(s) assento(s)
@@ -62,29 +99,29 @@ export default function SeatsPage() {
                 </CaptionItem>
                 <CaptionItem>
                     <CaptionCircle $isAvailable={false} $isSelected={false} />
-        
                     Indisponível
                 </CaptionItem>
             </CaptionContainer>
 
-            <FormContainer>
+            <FormContainer onSubmit={seatBuySubmission}>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input placeholder="Digite seu nome..." required  value={buyerName} onChange={e => setBuyerName(e.target.value)}/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input value={buyerCPF} onChange={cpfInput} maxLength={14} required placeholder="XXX.XXX.XXX-XX" />
 
-                <button>Reservar Assento(s)</button>
+                <button type="submit">Reservar Assento(s)</button>
             </FormContainer>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessionData.movie.posterURL} alt={sessionData.movie.title} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{sessionData.movie.title}</p>
+                    <p>{sessionData.day.weekday + " - " + sessionData.name}</p>
                 </div>
+                
             </FooterContainer>
 
         </PageContainer>
@@ -112,17 +149,31 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin: 20px 0;
     font-size: 18px;
+
+    gap: 15px;
+
     button {
+        margin-top: 50px;
         align-self: center;
+
+        color: #fff;
+        font-size: 18px;
+        background-color: #E8833A;
+        border-radius: 3px;
+        padding: 10px;
+        border: none;
     }
     input {
+        border: 1px solid #D5D5D5;
+        border-radius: 3px;
+        padding: 12px;
         width: calc(100vw - 60px);
     }
 `
@@ -182,6 +233,8 @@ const FooterContainer = styled.div`
         flex-direction: column;
         align-items: flex-start;
         p {
+            padding: 0px;
+            margin: 0px;
             text-align: left;
             &:nth-child(2) {
                 margin-top: 10px;
