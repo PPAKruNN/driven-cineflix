@@ -9,24 +9,24 @@ export default function SuccessPage() {
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessao</p></strong>
                 <p>{state.session.movie.title}</p>
                 <p>{state.session.day.date} - {state.session.name}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
                 {state.ids.map( seatId => <p key={seatId}>Assento {state.session.seats.find(c => c.id === seatId).name}</p>)}
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
                 <p>Nome: {state.name}</p>
                 <p>CPF: {state.cpf}</p>
             </TextContainer>
 
-            <Link to={"/"}><button>Voltar para Home</button></Link>
+            <Link data-test="go-home-btn" to={"/"}><button>Voltar para Home</button></Link>
         </PageContainer>
     )
 }

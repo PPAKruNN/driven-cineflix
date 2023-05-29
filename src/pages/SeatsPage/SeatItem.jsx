@@ -27,7 +27,7 @@ export default function SeatItem({seat: {id, name, isAvailable}, isSelected, isN
     } 
 
     return (
-        <StyledSeatItem onClick={select} $isAvailable={isAvailable} $isSelected={isSelected} >
+        <StyledSeatItem data-test="seat" onClick={select} $isAvailable={isAvailable} $isSelected={isSelected} >
             {name}
         </StyledSeatItem>
     )

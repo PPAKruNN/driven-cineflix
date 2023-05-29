@@ -22,12 +22,12 @@ export default function SessionsPage() {
 
         return sessionData.days.map( curr => {
             return(
-                <SessionContainer key={curr.id}>
+                <SessionContainer data-test="movie-day" key={curr.id}>
                     {`${curr.weekday} - ${curr.date}`} 
                     <ButtonsContainer>
                         {curr.showtimes.map( stime => {
                             return (
-                                <Link key={stime.id} to={"/assentos/" + stime.id}>
+                                <Link data-test="showtime" key={stime.id} to={"/assentos/" + stime.id}>
                                     <button>
                                         {stime.name}
                                     </button>
@@ -49,7 +49,7 @@ export default function SessionsPage() {
                 {genSessions()}
             </div> 
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={sessionData.posterURL} alt={sessionData.title} />
                 </div>
